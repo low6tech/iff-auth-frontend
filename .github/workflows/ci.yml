@@ -1,4 +1,4 @@
-name: CI
+name: Pull request Continuous Integration 🏗️
 
 on:
   pull_request:
