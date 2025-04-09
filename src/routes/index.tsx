@@ -43,21 +43,18 @@ function RouteComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const redirectWithToken = (token: string) => {
-    const callbackUrl = interpolateSigninCallbackUrl(searchParams.callbackUrl, {
-      token,
-    });
-
-    window.location.replace(callbackUrl);
-  };
-
   // Immediately redirect when a token is saved
   useEffect(() => {
     const token = localStorage.getItem('jwt');
 
     if (!token) return;
 
-    redirectWithToken(token);
+    const callbackUrl = interpolateSigninCallbackUrl(searchParams.callbackUrl, {
+      token,
+    });
+
+    window.location.replace(callbackUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSignin = async () => {
@@ -97,7 +94,11 @@ function RouteComponent() {
 
     localStorage.setItem('jwt', token);
 
-    redirectWithToken(token);
+    const callbackUrl = interpolateSigninCallbackUrl(searchParams.callbackUrl, {
+      token,
+    });
+
+    window.location.replace(callbackUrl);
   };
 
   const onRegister = async () => {
