@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
+    "check-types": "tsc -b",
     "lint": "eslint .",
+    "test": "echo 'No tests yet'",
     "preview": "vite preview",
     "generate-api-types": "openapi-typescript openapi-schema.json -o src/lib/api/generated-schema.ts"
   },

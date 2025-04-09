@@ -1,0 +1,70 @@
+name: Deploy to environment
+run-name: Deploy ${{ inputs.ref }} to ${{ inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        type: choice
+        required: true
+        options:
+          - development
+          - production
+      ref:
+        description: The tag or branch to deploy (e.g. `v1.0.0` or `my-branch`)
+        type: string
+        required: true
+        default: main
+
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.ref }} to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: When deploying to prod, ensure the ref is a version tag
+        if: ${{ inputs.environment == 'production' }}
+        run: |
+          if ! [[ "${{ inputs.ref }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error title=Production deployments must use a version tag::ref must be a version tag of the format vX.X.X (received: '${{ inputs.ref }}')"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ inputs.ref }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install
+
+      - uses: ./.github/actions/load-env
+        with:
+          secrets: ${{ toJSON(secrets) }}
+          vars: ${{ toJSON(vars) }}
+
+      - run: pnpm build
+
+      - name: Upload to Azure Blob Storage
+        run: |
+          az storage blob upload-batch \
+            --account-name "${{ vars.STORAGE_ACCOUNT_NAME }}" \
+            --account-key "${{ secrets.STORAGE_ACCOUNT_KEY }}" \
+            --destination "\$web" \
+            --source "dist" \
+            --overwrite
