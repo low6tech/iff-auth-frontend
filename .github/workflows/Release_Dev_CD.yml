@@ -1,0 +1,55 @@
+name: Release Dev Continuous Deployment 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-development
+  cancel-in-progress: true
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install
+
+      - id: semantic_release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_GH_TOKEN }}
+
+      - uses: ./.github/actions/load-env
+        with:
+          secrets: ${{ toJSON(secrets) }}
+          vars: ${{ toJSON(vars) }}
+
+      - if: ${{ steps.semantic_release.outputs.new_release_version != '' }}
+        run: pnpm build
+
+      - name: Upload to Azure Blob Storage
+        if: ${{ steps.semantic_release.outputs.new_release_version != '' }}
+        run: |
+          az storage blob upload-batch \
+            --account-name "${{ vars.STORAGE_ACCOUNT_NAME }}" \
+            --account-key "${{ secrets.STORAGE_ACCOUNT_KEY }}" \
+            --destination "\$web" \
+            --source "dist" \
+            --overwrite

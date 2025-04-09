@@ -1,0 +1,27 @@
+name: Load Environment Variables
+description: Populates environment variables from provided secrets and vars.
+
+inputs:
+  secrets:
+    description: JSON string of environment secrets to populate
+    required: false
+    default: '{}'
+  vars:
+    description: JSON string of environment variables to populate
+    required: false
+    default: '{}'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Populate environment variables
+      shell: bash
+      env:
+        SECRETS_JSON: ${{ inputs.secrets }}
+        VARS_JSON: ${{ inputs.vars }}
+      run: |
+        # Process secrets
+        echo "$SECRETS_JSON" | jq -r 'to_entries | .[] | "echo \"\(.key)=\(.value)\" >> $GITHUB_ENV"' | sh
+        
+        # Process envs
+        echo "$VARS_JSON" | jq -r 'to_entries | .[] | "echo \"\(.key)=\(.value)\" >> $GITHUB_ENV"' | sh
