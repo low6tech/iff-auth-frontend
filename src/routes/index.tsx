@@ -65,6 +65,9 @@ function RouteComponent() {
       body: {
         username: email,
         password,
+        token: {
+          payloadFields: ['id', 'username'],
+        },
       },
       headers: {
         'x-tenant-id': 'iff',
@@ -144,13 +147,18 @@ function RouteComponent() {
           <Button
             variant="primary"
             size="lg"
-            // disabled={!email || !password}
+            disabled={!email || !password}
             onClick={onSignin}
           >
             Sign in
           </Button>
 
-          <Button variant="secondary" size="lg" onClick={onRegister}>
+          <Button
+            variant="secondary"
+            size="lg"
+            disabled={!email || !password}
+            onClick={onRegister}
+          >
             Register
           </Button>
         </div>
