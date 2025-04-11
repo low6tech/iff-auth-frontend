@@ -4,6 +4,7 @@ import {
   useNavigate,
 } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { CountriesCombobox } from 'src/components/CountriesCombobox';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
 import { fetchClient } from 'src/lib/api/client';
@@ -14,7 +15,7 @@ import {
 
 const TOKEN_URL_TEMPLATE_KEY = 'token' as const;
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/register')({
   validateSearch: (search: Record<string, unknown>) => {
     const callbackUrl = search.callbackUrl;
 
@@ -32,7 +33,7 @@ export const Route = createFileRoute('/')({
       callbackUrl,
     };
   },
-  component: SignInPage,
+  component: RegisterPage,
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
 });
 
@@ -40,13 +41,18 @@ const interpolateSigninCallbackUrl = interpolateUrlTemplate<
   typeof TOKEN_URL_TEMPLATE_KEY
 >;
 
-function SignInPage() {
+function RegisterPage() {
   const navigate = useNavigate();
   const searchParams = Route.useSearch();
 
   const [error, setError] = useState<string | null>(null);
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [country, setCountry] = useState('');
 
   // Immediately redirect when a token is saved
   useEffect(() => {
@@ -65,7 +71,7 @@ function SignInPage() {
   const onSignin = async () => {
     const { data, response } = await fetchClient.POST('/user/signIn', {
       body: {
-        username,
+        username: email,
         password,
         token: {
           payloadFields: ['id', 'username'],
@@ -103,11 +109,46 @@ function SignInPage() {
     window.location.replace(callbackUrl);
   };
 
+  const onRegister = async () => {
+    await fetchClient.POST('/user/signUp', {
+      body: {
+        username,
+        password,
+        tenantId: 'iff',
+        country,
+        email,
+        firstName,
+        lastName,
+      },
+    });
+
+    await onSignin();
+  };
+
   return (
     <div className="grid flex-1 place-items-center">
-      <div className="bg-popover container mx-auto flex h-full flex-col p-3 sm:h-fit sm:max-w-md sm:rounded-lg sm:p-4">
+      <div className="bg-popover container mx-auto flex h-full flex-col overflow-hidden p-3 sm:h-fit sm:max-w-md sm:rounded-lg sm:p-4">
         <div className="flex flex-col gap-4 py-3">
-          <h2 className="text-2xl font-bold">Sign in</h2>
+          <h2 className="text-2xl font-bold">Register</h2>
+
+          <Input
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+
+          <Input
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+
+          <Input
+            placeholder="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
           <Input
             placeholder="Username"
@@ -121,6 +162,11 @@ function SignInPage() {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
           />
+
+          <CountriesCombobox
+            value={country}
+            onChange={(value) => setCountry(value)}
+          />
         </div>
 
         {error && (
@@ -129,12 +175,12 @@ function SignInPage() {
 
         <div className="flex flex-col gap-2 py-3">
           <Button
+            disabled={!email || !password || !username || !country}
             variant="primary"
             size="lg"
-            disabled={!username || !password}
-            onClick={onSignin}
+            onClick={onRegister}
           >
-            Sign in
+            Register
           </Button>
 
           <Button
@@ -142,12 +188,12 @@ function SignInPage() {
             size="lg"
             onClick={() => {
               navigate({
-                to: '/register',
+                to: '/',
                 search: { callbackUrl: searchParams.callbackUrl },
               });
             }}
           >
-            Register
+            Sign in
           </Button>
         </div>
       </div>
