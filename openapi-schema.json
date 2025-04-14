@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Core User Service",
-    "description": "",
+    "title": "Low6 Core User Service",
+    "description": "API Documentation for Low6 Core User Service",
     "version": "1.0.0"
   },
   "components": {
@@ -32,24 +32,12 @@
                     "jwk": {
                       "type": "object",
                       "properties": {
-                        "kty": {
-                          "type": "string"
-                        },
-                        "kid": {
-                          "type": "string"
-                        },
-                        "use": {
-                          "type": "string"
-                        },
-                        "alg": {
-                          "type": "string"
-                        },
-                        "n": {
-                          "type": "string"
-                        },
-                        "e": {
-                          "type": "string"
-                        }
+                        "kty": { "type": "string" },
+                        "kid": { "type": "string" },
+                        "use": { "type": "string" },
+                        "alg": { "type": "string" },
+                        "n": { "type": "string" },
+                        "e": { "type": "string" }
                       },
                       "required": ["kty", "kid", "use", "alg", "n", "e"]
                     }
@@ -66,12 +54,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -85,12 +69,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -104,12 +84,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -130,38 +106,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "tenantId": {
-                    "maxLength": 255,
-                    "type": "string"
-                  },
-                  "username": {
-                    "maxLength": 255,
-                    "type": "string"
-                  },
-                  "password": {
-                    "maxLength": 255,
-                    "type": "string"
-                  },
-                  "firstName": {
-                    "maxLength": 255,
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "maxLength": 255,
-                    "type": "string"
-                  },
-                  "blocked": {
-                    "type": "boolean"
-                  },
+                  "tenantId": { "maxLength": 255, "type": "string" },
+                  "username": { "maxLength": 255, "type": "string" },
+                  "password": { "maxLength": 255, "type": "string" },
+                  "firstName": { "maxLength": 255, "type": "string" },
+                  "lastName": { "maxLength": 255, "type": "string" },
+                  "blocked": { "type": "boolean" },
                   "email": {
                     "anyOf": [
-                      {
-                        "maxLength": 255,
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
+                      { "maxLength": 255, "type": "string" },
+                      { "type": "null" }
                     ]
                   },
                   "age": {
@@ -171,42 +125,25 @@
                         "maximum": 2147483647,
                         "type": "integer"
                       },
-                      {
-                        "type": "null"
-                      }
+                      { "type": "null" }
                     ]
                   },
                   "gender": {
                     "anyOf": [
-                      {
-                        "maxLength": 255,
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
+                      { "maxLength": 255, "type": "string" },
+                      { "type": "null" }
                     ]
                   },
                   "region": {
                     "anyOf": [
-                      {
-                        "maxLength": 255,
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
+                      { "maxLength": 255, "type": "string" },
+                      { "type": "null" }
                     ]
                   },
                   "address": {
                     "anyOf": [
-                      {
-                        "maxLength": 255,
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
+                      { "maxLength": 255, "type": "string" },
+                      { "type": "null" }
                     ]
                   }
                 },
@@ -235,54 +172,21 @@
                       "maximum": 2147483647,
                       "type": "integer"
                     },
-                    "tenantId": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "username": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "password": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "firstName": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "lastName": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "updatedAt": {
-                      "type": "string"
-                    },
+                    "tenantId": { "maxLength": 255, "type": "string" },
+                    "username": { "maxLength": 255, "type": "string" },
+                    "password": { "maxLength": 255, "type": "string" },
+                    "firstName": { "maxLength": 255, "type": "string" },
+                    "lastName": { "maxLength": 255, "type": "string" },
+                    "createdAt": { "type": "string" },
+                    "updatedAt": { "type": "string" },
                     "lastLoginAt": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
                     },
-                    "blocked": {
-                      "type": "boolean"
-                    },
+                    "blocked": { "type": "boolean" },
                     "email": {
                       "anyOf": [
-                        {
-                          "maxLength": 255,
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
+                        { "maxLength": 255, "type": "string" },
+                        { "type": "null" }
                       ]
                     },
                     "age": {
@@ -292,42 +196,25 @@
                           "maximum": 2147483647,
                           "type": "integer"
                         },
-                        {
-                          "type": "null"
-                        }
+                        { "type": "null" }
                       ]
                     },
                     "gender": {
                       "anyOf": [
-                        {
-                          "maxLength": 255,
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
+                        { "maxLength": 255, "type": "string" },
+                        { "type": "null" }
                       ]
                     },
                     "region": {
                       "anyOf": [
-                        {
-                          "maxLength": 255,
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
+                        { "maxLength": 255, "type": "string" },
+                        { "type": "null" }
                       ]
                     },
                     "address": {
                       "anyOf": [
-                        {
-                          "maxLength": 255,
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
+                        { "maxLength": 255, "type": "string" },
+                        { "type": "null" }
                       ]
                     }
                   },
@@ -359,12 +246,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -378,12 +261,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -397,12 +276,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -421,29 +296,54 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string"
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["username", "password"]
                   },
-                  "password": {
-                    "type": "string"
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["email", "password"]
                   }
-                },
-                "required": ["username", "password"]
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
             "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           },
           "400": {
             "description": "Default Response",
@@ -452,12 +352,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -471,12 +367,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -495,26 +387,32 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string"
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" }
+                    },
+                    "required": ["username"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" }
+                    },
+                    "required": ["email"]
                   }
-                },
-                "required": ["username"]
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
             "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           },
           "400": {
             "description": "Default Response",
@@ -523,12 +421,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -542,12 +436,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -564,26 +454,53 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string"
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["username", "password"]
                   },
-                  "password": {
-                    "type": "string"
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["email", "password"]
                   }
-                },
-                "required": ["username", "password"]
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "parameters": [
           {
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "in": "query",
             "name": "token",
             "required": true
@@ -592,11 +509,7 @@
         "responses": {
           "200": {
             "description": "Default Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           },
           "400": {
             "description": "Default Response",
@@ -605,12 +518,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -624,12 +533,8 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    }
+                    "error": { "type": "string" },
+                    "message": { "type": "string" }
                   },
                   "required": ["message"]
                 }
@@ -644,56 +549,15 @@
         "summary": "Get root",
         "tags": ["observability"],
         "description": "Get root",
-        "responses": {
-          "200": {
-            "description": "Default Response"
-          }
-        }
+        "responses": { "200": { "description": "Default Response" } }
       }
     }
   },
   "servers": [
-    {
-      "url": "http://localhost:8080",
-      "description": "Development server"
-    }
+    { "url": "http://localhost:8080", "description": "Development server" }
   ],
   "tags": [
-    {
-      "name": "admin",
-      "description": "Admin related end-points to manage game, card, user related data. Requires JWT token in Authorization header."
-    },
-    {
-      "name": "admin-game",
-      "description": "Game related end-points for admin"
-    },
-    {
-      "name": "admin-question",
-      "description": "Question related end-points for admin"
-    },
-    {
-      "name": "admin-pickem",
-      "description": "Pickem related end-points for admin"
-    },
-    {
-      "name": "admin-card",
-      "description": "Card related end-points for admin"
-    },
-    {
-      "name": "admin-user",
-      "description": "User related end-points for admin"
-    },
-    {
-      "name": "card",
-      "description": "Card related end-points"
-    },
-    {
-      "name": "game",
-      "description": "Game related end-points"
-    },
-    {
-      "name": "observability",
-      "description": "Observability related end-points"
-    }
+    { "name": "user", "description": "User related end-points" },
+    { "name": "key", "description": "Key related end-points" }
   ]
 }
