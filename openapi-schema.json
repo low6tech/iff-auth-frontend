@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "BBC Squares API",
-    "description": "API Documentation for BBC Squares API",
+    "title": "Low6 Core User Service",
+    "description": "API Documentation for Low6 Core User Service",
     "version": "1.0.0"
   },
   "components": {
@@ -296,16 +296,49 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": { "type": "string" },
-                  "password": { "type": "string" }
-                },
-                "required": ["username", "password"]
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["username", "password"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["email", "password"]
+                  }
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -354,13 +387,27 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": { "username": { "type": "string" } },
-                "required": ["username"]
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" }
+                    },
+                    "required": ["username"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" }
+                    },
+                    "required": ["email"]
+                  }
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -407,16 +454,49 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "username": { "type": "string" },
-                  "password": { "type": "string" }
-                },
-                "required": ["username", "password"]
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["username", "password"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "email": { "type": "string" },
+                      "password": { "type": "string" },
+                      "token": {
+                        "type": "object",
+                        "properties": {
+                          "payloadFields": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          }
+                        },
+                        "required": ["payloadFields"]
+                      }
+                    },
+                    "required": ["email", "password"]
+                  }
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "parameters": [
           {
@@ -477,35 +557,7 @@
     { "url": "http://localhost:8080", "description": "Development server" }
   ],
   "tags": [
-    {
-      "name": "admin",
-      "description": "Admin related end-points to manage game, card, user related data. Requires JWT token in Authorization header."
-    },
-    {
-      "name": "admin-game",
-      "description": "Game related end-points for admin"
-    },
-    {
-      "name": "admin-question",
-      "description": "Question related end-points for admin"
-    },
-    {
-      "name": "admin-pickem",
-      "description": "Pickem related end-points for admin"
-    },
-    {
-      "name": "admin-card",
-      "description": "Card related end-points for admin"
-    },
-    {
-      "name": "admin-user",
-      "description": "User related end-points for admin"
-    },
-    { "name": "card", "description": "Card related end-points" },
-    { "name": "game", "description": "Game related end-points" },
-    {
-      "name": "observability",
-      "description": "Observability related end-points"
-    }
+    { "name": "user", "description": "User related end-points" },
+    { "name": "key", "description": "Key related end-points" }
   ]
 }

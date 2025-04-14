@@ -6,6 +6,7 @@ export const submitRegister = async ({
   meta,
 }: {
   value: {
+    username: string;
     email: string;
     password: string;
     country: string;
@@ -19,11 +20,11 @@ export const submitRegister = async ({
 }) => {
   await fetchClient.POST('/user/signUp', {
     body: {
-      username: value.email,
+      username: value.username,
+      email: value.email,
       password: value.password,
       tenantId: 'iff',
       country: value.country,
-      email: value.email,
       firstName: value.firstName,
       lastName: value.lastName,
     },

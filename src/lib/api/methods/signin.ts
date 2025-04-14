@@ -15,7 +15,7 @@ export const submitSignin = async ({
 }) => {
   const { response } = await fetchClient.POST('/user/signIn', {
     body: {
-      username: value.email,
+      email: value.email,
       password: value.password,
       token: {
         payloadFields: ['id', 'username'],

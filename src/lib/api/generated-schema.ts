@@ -215,11 +215,22 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            requestBody: {
+            requestBody?: {
                 content: {
                     "application/json": {
                         username: string;
+                        email?: string;
                         password: string;
+                        token?: {
+                            payloadFields: string[];
+                        };
+                    } | {
+                        username?: string;
+                        email: string;
+                        password: string;
+                        token?: {
+                            payloadFields: string[];
+                        };
                     };
                 };
             };
@@ -286,11 +297,22 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            requestBody: {
+            requestBody?: {
                 content: {
                     "application/json": {
                         username: string;
+                        email?: string;
                         password: string;
+                        token?: {
+                            payloadFields: string[];
+                        };
+                    } | {
+                        username?: string;
+                        email: string;
+                        password: string;
+                        token?: {
+                            payloadFields: string[];
+                        };
                     };
                 };
             };
@@ -341,10 +363,14 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            requestBody: {
+            requestBody?: {
                 content: {
                     "application/json": {
                         username: string;
+                        email?: string;
+                    } | {
+                        username?: string;
+                        email: string;
                     };
                 };
             };
