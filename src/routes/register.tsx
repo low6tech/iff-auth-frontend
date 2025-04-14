@@ -3,27 +3,24 @@ import {
   ErrorComponent,
   useNavigate,
 } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useForm } from '@tanstack/react-form';
+import { useState } from 'react';
 import { CountriesCombobox } from 'src/components/CountriesCombobox';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
-import { fetchClient } from 'src/lib/api/client';
+import { z } from 'zod';
+import { register } from 'src/lib/api/methods/register';
+import { Email, Password } from 'src/lib/schemas/user';
 import {
-  interpolateUrlTemplate,
-  validateUrlTemplate,
-} from 'src/lib/url-template';
-
-const TOKEN_URL_TEMPLATE_KEY = 'token' as const;
+  interpolateCallbackUrl,
+  isValidCallbackUrl,
+} from 'src/lib/callback-url';
 
 export const Route = createFileRoute('/register')({
   validateSearch: (search: Record<string, unknown>) => {
     const callbackUrl = search.callbackUrl;
 
-    if (
-      !callbackUrl ||
-      typeof callbackUrl !== 'string' ||
-      !validateUrlTemplate(callbackUrl, [TOKEN_URL_TEMPLATE_KEY])
-    ) {
+    if (!isValidCallbackUrl(callbackUrl)) {
       throw new Error(
         'callbackUrl must be a valid URL with a `token` placeholder.'
       );
@@ -37,9 +34,20 @@ export const Route = createFileRoute('/register')({
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
 });
 
-const interpolateSigninCallbackUrl = interpolateUrlTemplate<
-  typeof TOKEN_URL_TEMPLATE_KEY
->;
+const registrationSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: Email,
+  username: z
+    .string()
+    .min(1, 'Username is required')
+    .regex(
+      /^[a-zA-Z0-9_-]+$/,
+      'Must only contain letters, numbers, underscores, or hyphens'
+    ),
+  password: Password,
+  country: z.string().min(1, 'Country is required'),
+});
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -47,83 +55,26 @@ function RegisterPage() {
 
   const [error, setError] = useState<string | null>(null);
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [country, setCountry] = useState('');
-
-  // Immediately redirect when a token is saved
-  useEffect(() => {
-    const token = localStorage.getItem('jwt');
-
-    if (!token) return;
-
-    const callbackUrl = interpolateSigninCallbackUrl(searchParams.callbackUrl, {
-      token,
-    });
-
-    window.location.replace(callbackUrl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onSignin = async () => {
-    const { data, response } = await fetchClient.POST('/user/signIn', {
-      body: {
-        username: email,
-        password,
-        token: {
-          payloadFields: ['id', 'username'],
-        },
-      },
-    });
-
-    const errorMessage =
-      data &&
-      typeof data === 'object' &&
-      'error' in data &&
-      typeof data.error === 'string'
-        ? data.error
-        : null;
-
-    if (errorMessage) {
-      setError(errorMessage);
-
-      return;
-    }
-
-    const token = response.headers.get('token');
-
-    if (!token) {
-      setError('Failed to retrieve token. Please try again.');
-      return;
-    }
-
-    localStorage.setItem('jwt', token);
-
-    const callbackUrl = interpolateSigninCallbackUrl(searchParams.callbackUrl, {
-      token,
-    });
-
-    window.location.replace(callbackUrl);
-  };
-
-  const onRegister = async () => {
-    await fetchClient.POST('/user/signUp', {
-      body: {
-        username,
-        password,
-        tenantId: 'iff',
-        country,
-        email,
-        firstName,
-        lastName,
-      },
-    });
-
-    await onSignin();
-  };
+  const form = useForm({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      username: '',
+      password: '',
+      country: '',
+    },
+    validators: {
+      onChange: registrationSchema,
+    },
+    onSubmit: async (props) => {
+      await register(props.value, {
+        getCallbackUrl: (token) =>
+          interpolateCallbackUrl(searchParams.callbackUrl, token),
+        setError,
+      });
+    },
+  });
 
   return (
     <div className="grid flex-1 place-items-center">
@@ -131,42 +82,144 @@ function RegisterPage() {
         <div className="flex flex-col gap-4 py-3">
           <h2 className="text-2xl font-bold">Register</h2>
 
-          <Input
-            placeholder="First name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+          <form.Field name="firstName">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  placeholder="First name"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
 
-          <Input
-            placeholder="Last name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
 
-          <Input
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <form.Field name="lastName">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  placeholder="Last name"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
 
-          <Input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
 
-          <Input
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-          />
+          <form.Field name="email">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
 
-          <CountriesCombobox
-            value={country}
-            onChange={(value) => setCountry(value)}
-          />
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="username">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  placeholder="Username"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
+
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="password">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  placeholder="Password"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  type="password"
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
+
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="country">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <CountriesCombobox
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(value) => field.handleChange(value)}
+                  aria-invalid={
+                    field.state.meta.isTouched &&
+                    field.state.meta.errors.length > 0
+                  }
+                />
+
+                {field.state.meta.isTouched && field.state.meta.errors[0] && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0].message}
+                  </p>
+                )}
+              </div>
+            )}
+          </form.Field>
         </div>
 
         {error && (
@@ -174,14 +227,18 @@ function RegisterPage() {
         )}
 
         <div className="flex flex-col gap-2 py-3">
-          <Button
-            disabled={!email || !password || !username || !country}
-            variant="primary"
-            size="lg"
-            onClick={onRegister}
-          >
-            Register
-          </Button>
+          <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={form.handleSubmit}
+                loading={isSubmitting}
+              >
+                Register
+              </Button>
+            )}
+          </form.Subscribe>
 
           <Button
             variant="secondary"

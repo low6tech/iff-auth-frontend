@@ -23,6 +23,7 @@ import { countryOptions } from 'src/lib/countries';
 export function CountriesCombobox(props: {
   value: string;
   onChange: (value: string) => void;
+  onBlur: () => void;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -44,7 +45,7 @@ export function CountriesCombobox(props: {
           <ChevronsUpDown className="flex-none opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full max-w-screen p-0">
+      <PopoverContent className="w-full max-w-screen p-0" onBlur={props.onBlur}>
         <Command>
           <CommandInput placeholder="Search country..." className="h-9" />
           <CommandList>

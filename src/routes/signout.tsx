@@ -1,13 +1,20 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { LOCAL_STORAGE_TOKEN_KEY } from 'src/constants/local-storage';
+import { getSearchCallbackUrlTemplate } from 'src/lib/callback-url';
 
 export const Route = createFileRoute('/signout')({
   component: RouteComponent,
   beforeLoad: async ({ search }) => {
-    localStorage.removeItem('token');
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
 
-    if ('callbackUrl' in search && typeof search.callbackUrl === 'string') {
-      throw redirect({ to: '/', search: { callbackUrl: search.callbackUrl } });
-    }
+    const callbackUrlTemplate = getSearchCallbackUrlTemplate(search);
+
+    if (!callbackUrlTemplate) return;
+
+    throw redirect({
+      to: '/',
+      search: { callbackUrl: callbackUrlTemplate },
+    });
   },
 });
 
