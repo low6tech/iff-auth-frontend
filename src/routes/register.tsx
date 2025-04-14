@@ -9,7 +9,7 @@ import { CountriesCombobox } from 'src/components/CountriesCombobox';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
 import { z } from 'zod';
-import { register } from 'src/lib/api/methods/register';
+import { submitRegister } from 'src/lib/api/methods/register';
 import { Email, Password } from 'src/lib/schemas/user';
 import {
   interpolateCallbackUrl,
@@ -68,11 +68,22 @@ function RegisterPage() {
       onChange: registrationSchema,
     },
     onSubmit: async (props) => {
-      await register(props.value, {
-        getCallbackUrl: (token) =>
-          interpolateCallbackUrl(searchParams.callbackUrl, token),
-        setError,
-      });
+      try {
+        await submitRegister({
+          value: props.value,
+          meta: {
+            getCallbackUrl: (token: string) =>
+              interpolateCallbackUrl(searchParams.callbackUrl, token),
+            setError,
+          },
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+
+        throw error;
+      }
     },
   });
 

@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
-import { signin } from 'src/lib/api/methods/signin';
+import { submitSignin } from 'src/lib/api/methods/signin';
 import {
   isValidCallbackUrl,
   interpolateCallbackUrl,
@@ -52,11 +52,22 @@ function SignInPage() {
     validators: {
       onChange: signinSchema,
     },
-    onSubmit: async (props) => signin(props.value, props.meta),
-    onSubmitMeta: {
-      getCallbackUrl: (token: string) =>
-        interpolateCallbackUrl(searchParams.callbackUrl, token),
-      setError,
+    onSubmit: async (props) => {
+      try {
+        await submitSignin({
+          value: props.value,
+          meta: {
+            getCallbackUrl: (token: string) =>
+              interpolateCallbackUrl(searchParams.callbackUrl, token),
+          },
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+
+        throw error;
+      }
     },
   });
 

@@ -23,7 +23,7 @@ export const interpolateUrlTemplate = <TKeys extends string>(
   urlTemplate: string,
   values: Record<TKeys, string>
 ): string => {
-  if (!validateUrlTemplate(Object.keys(values))(urlTemplate)) {
+  if (!validateUrlTemplate(urlTemplate, Object.keys(values))) {
     throw new Error(`Invalid URL template: ${urlTemplate}`);
   }
 

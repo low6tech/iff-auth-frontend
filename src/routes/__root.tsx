@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Header } from 'src/components/header';
 import { LOCAL_STORAGE_TOKEN_KEY } from 'src/constants/local-storage';
@@ -26,10 +26,7 @@ export const Route = createRootRoute({
 
     const callbackUrl = interpolateCallbackUrl(callbackUrlTemplate, token);
 
-    throw redirect({
-      to: callbackUrl,
-      replace: true,
-    });
+    window.location.replace(callbackUrl);
   },
 
   component: () => (

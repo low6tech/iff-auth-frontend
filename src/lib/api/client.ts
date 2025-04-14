@@ -10,4 +10,23 @@ export const fetchClient = createFetchClient<paths>({
   },
 });
 
+fetchClient.use({
+  onResponse: ({ response }) => {
+    const data = response.clone().json();
+
+    // Throw the standard error message if it exists
+    const errorMessage =
+      data &&
+      typeof data === 'object' &&
+      'error' in data &&
+      typeof data.error === 'string'
+        ? data.error
+        : null;
+
+    if (errorMessage) {
+      throw new Error(errorMessage);
+    }
+  },
+});
+
 export const $api = createClient(fetchClient);
