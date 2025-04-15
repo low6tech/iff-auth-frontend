@@ -16,6 +16,7 @@ const buttonVariants = cva(
           'bg-primary text-primary-foreground border-b-[4px]',
         secondary:
           'bg-secondary text-secondary-foreground border-b-[4px] border-[lighten(--color-secondary, 50%)]',
+        input: 'border border-input bg-white text-muted-foreground font-normal',
       },
       size: {
         md: 'px-4 h-9',

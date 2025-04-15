@@ -1,10 +1,13 @@
-import { useForm } from '@tanstack/react-form';
+import { useForm, useStore } from '@tanstack/react-form';
 import {
   createFileRoute,
   ErrorComponent,
   useNavigate,
 } from '@tanstack/react-router';
 import { useState } from 'react';
+
+import { AuthHeader } from 'src/components/auth/Header.tsx';
+import { getFilledFormPercentage } from 'src/components/auth/getFilledFormPercentage.helper.ts';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
 import { submitSignin } from 'src/lib/api/methods/signin';
@@ -71,12 +74,15 @@ function SignInPage() {
     },
   });
 
-  return (
-    <div className="grid flex-1 place-items-center">
-      <div className="bg-popover container mx-auto flex h-full flex-col p-3 sm:h-fit sm:max-w-md sm:rounded-lg sm:p-4">
-        <div className="flex flex-col gap-4 py-3">
-          <h2 className="text-2xl font-bold">Sign in</h2>
+  const state = useStore(form.store, state => state)
+  const percentageFilled = getFilledFormPercentage(state.values);
 
+  return (
+    <section className="h-full py-8 flex justify-center">
+      <div className='w-full max-w-96'>
+        <AuthHeader title='Sign in' percentageFilled={percentageFilled} />
+
+        <div className="flex flex-col gap-4 py-3">
           <form.Field name="email">
             {(field) => (
               <div className="flex flex-col gap-1">
@@ -136,6 +142,7 @@ function SignInPage() {
                   size="lg"
                   onClick={form.handleSubmit}
                   loading={isSubmitting}
+                  disabled={!state.isDirty || !state.isFormValid}
                 >
                   Sign in
                 </Button>
@@ -157,6 +164,6 @@ function SignInPage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

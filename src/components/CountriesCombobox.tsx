@@ -31,10 +31,11 @@ export function CountriesCombobox(props: {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="secondary"
+          variant="input"
           role="combobox"
           aria-expanded={open}
-          className="justify-between"
+          className={cn('justify-between px-3',
+            props.value && 'text-black')}
         >
           <span className="truncate">
             {props.value

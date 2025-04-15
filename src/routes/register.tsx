@@ -3,8 +3,11 @@ import {
   ErrorComponent,
   useNavigate,
 } from '@tanstack/react-router';
-import { useForm } from '@tanstack/react-form';
+import { useForm, useStore } from '@tanstack/react-form';
 import { useState } from 'react';
+
+import { getFilledFormPercentage } from 'src/components/auth/getFilledFormPercentage.helper.ts';
+import { AuthHeader } from 'src/components/auth/Header.tsx';
 import { CountriesCombobox } from 'src/components/CountriesCombobox';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
@@ -86,13 +89,18 @@ function RegisterPage() {
       }
     },
   });
+  console.log("=>(register.tsx:91) form", form.state);
+
+
+  const state = useStore(form.store, state => state)
+  const percentageFilled = getFilledFormPercentage(state.values);
 
   return (
-    <div className="grid flex-1 place-items-center">
-      <div className="bg-popover container mx-auto flex h-full flex-col overflow-hidden p-3 sm:h-fit sm:max-w-md sm:rounded-lg sm:p-4">
-        <div className="flex flex-col gap-4 py-3">
-          <h2 className="text-2xl font-bold">Register</h2>
+    <section className="h-full py-8 flex justify-center">
+      <div className='w-full max-w-96'>
+        <AuthHeader title='Register' percentageFilled={percentageFilled} />
 
+        <div className="flex flex-col gap-4 py-3">
           <form.Field name="firstName">
             {(field) => (
               <div className="flex flex-col gap-1">
@@ -245,6 +253,7 @@ function RegisterPage() {
                 size="lg"
                 onClick={form.handleSubmit}
                 loading={isSubmitting}
+                disabled={!state.isDirty || !state.isFormValid}
               >
                 Register
               </Button>
@@ -265,6 +274,6 @@ function RegisterPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -4,7 +4,7 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(16% 0.0824 289deg);
-  --foreground: oklch(0.985 0 0);
+  --foreground: oklch(0.976 0 89.876);
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.21 0.006 285.885);
@@ -19,7 +19,7 @@
   --accent-foreground: oklch(79% 0.125 209deg);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(0 0 0 / 30%);
-  --input: oklch(1 0 0 / 15%);
+  --input: rgba(226, 226, 226, 1);
   --ring: oklch(0.552 0.016 285.938);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -79,6 +79,11 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-foreground text-background;
   }
+}
+
+body {
+  background: var(--foreground);
+  color: var(--background);
 }

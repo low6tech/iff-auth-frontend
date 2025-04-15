@@ -6,6 +6,7 @@ import {
   getSearchCallbackUrlTemplate,
   interpolateCallbackUrl,
 } from 'src/lib/callback-url';
+import { Logo } from 'src/components/Logo.tsx';
 
 export const Route = createRootRoute({
   //? Immediately redirect to callback with stored token if present
@@ -32,7 +33,38 @@ export const Route = createRootRoute({
   component: () => (
     <div className="flex min-h-screen max-w-screen flex-col overflow-hidden">
       <Header />
-      <Outlet />
+
+      <>
+        {/* Mobile */}
+        <div className='block md:hidden px-4 h-full bg-foreground'>
+          <Outlet />
+        </div>
+
+        {/* Desktop */}
+        <div className='hidden md:block min-h-svh h-full'>
+          <div className='grid grid-cols-2 grid-items-center h-full min-h-svh relative'>
+            <div className='px-20 z-10'>
+              <Outlet />
+            </div>
+
+            <div className='h-full relative'>
+              <img
+                src='/images/desktop-bg-image.png'
+                alt='players'
+                className='h-full object-cover object-right'
+              />
+
+              <div className='h-full w-full absolute top-0 right-0 z-0'>
+                  <div className='bg-background opacity-45 h-full w-full absolute top-0 right-0' />
+
+                    <Logo className='z-30 w-80 absolute right-1/4 top-1/2 -translate-y-1/2' />
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </>
+
       <TanStackRouterDevtools />
     </div>
   ),
