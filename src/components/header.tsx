@@ -1,10 +1,9 @@
-import ClientLogo from 'src/assets/client-logo.svg';
-
 import { ArrowLeft } from 'lucide-react';
+import { Logo } from 'src/components/Logo.tsx';
 
 export const Header = () => {
   return (
-    <header>
+    <header className='bg-background'>
       <div className="relative flex h-16 items-center py-3">
         <div className="flex flex-1 px-4">
           <a
@@ -15,11 +14,7 @@ export const Header = () => {
           </a>
         </div>
 
-        <img
-          src={ClientLogo}
-          alt=""
-          className="absolute left-1/2 w-[140px] -translate-x-1/2"
-        />
+        <Logo className="absolute left-1/2 -translate-x-1/2" />
       </div>
     </header>
   );
