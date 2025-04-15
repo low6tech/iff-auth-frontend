@@ -8,7 +8,8 @@ import { Loader } from 'src/components/Loader';
 //? To replace the button in src/ui/button.tsx. Remove comment when done.
 
 const buttonVariants = cva(
-  'group inline-flex cursor-pointer disabled:cursor-auto overflow-hidden items-center select-none justify-center whitespace-nowrap rounded-md text-sm font-bold ring-offset-white transition-colors ease-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300',
+  'group inline-flex cursor-pointer disabled:cursor-auto overflow-hidden items-center select-none justify-center whitespace-nowrap rounded-md ' +
+  'text-sm font-bold ring-offset-white transition-colors ease-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300',
   {
     variants: {
       variant: {
@@ -16,7 +17,7 @@ const buttonVariants = cva(
           'bg-primary text-primary-foreground border-b-[4px]',
         secondary:
           'bg-secondary text-secondary-foreground border-b-[4px] border-[lighten(--color-secondary, 50%)]',
-        input: 'border border-input bg-white text-muted-foreground font-normal',
+        input: 'border border-input bg-white text-muted-foreground font-normal text-base md:text-sm',
       },
       size: {
         md: 'px-4 h-9',

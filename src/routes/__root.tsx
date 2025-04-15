@@ -57,7 +57,7 @@ export const Route = createRootRoute({
               <div className='h-full w-full absolute top-0 right-0 z-0'>
                   <div className='bg-background opacity-45 h-full w-full absolute top-0 right-0' />
 
-                    <Logo className='z-30 w-80 absolute right-1/4 top-1/2 -translate-y-1/2' />
+                    <Logo className='z-30 md:w-72 lg:w-80 absolute right-1/4 top-1/2 -translate-y-1/2' />
               </div>
 
             </div>
