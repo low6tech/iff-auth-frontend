@@ -249,8 +249,7 @@ function RegisterPage() {
                   />
                 </div>
                 <span className="ml-2 text-sm">
-                  I confirm that I am over 21 and agree to the General Terms and
-                  Game Rules in accordance with the Privacy Policies.
+                  I confirm that I am over 21 and agree to the Game Rules.
                 </span>
               </div>
             )}
