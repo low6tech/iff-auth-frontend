@@ -7,6 +7,7 @@ import {
   interpolateCallbackUrl,
 } from 'src/lib/callback-url';
 import { Logo } from 'src/components/Logo.tsx';
+import { Toaster } from 'src/components/ui/sonner';
 
 export const Route = createRootRoute({
   //? Immediately redirect to callback with stored token if present
@@ -36,34 +37,35 @@ export const Route = createRootRoute({
 
       <>
         {/* Mobile */}
-        <div className='block md:hidden px-4 h-full bg-foreground'>
+        <div className="bg-foreground block h-full px-4 md:hidden">
           <Outlet />
         </div>
 
         {/* Desktop */}
-        <div className='hidden md:block min-h-svh h-full'>
-          <div className='grid grid-cols-2 grid-items-center h-full min-h-svh relative'>
-            <div className='px-20 z-10'>
+        <div className="hidden h-full min-h-svh md:block">
+          <div className="grid-items-center relative grid h-full min-h-svh grid-cols-2">
+            <div className="z-10 px-20">
               <Outlet />
             </div>
 
-            <div className='h-full relative'>
+            <div className="relative h-full">
               <img
-                src='/images/desktop-bg-image.png'
-                alt='players'
-                className='h-full object-cover object-right'
+                src="/images/desktop-bg-image.png"
+                alt="players"
+                className="h-full object-cover object-right"
               />
 
-              <div className='h-full w-full absolute top-0 right-0 z-0'>
-                  <div className='bg-background opacity-45 h-full w-full absolute top-0 right-0' />
+              <div className="absolute top-0 right-0 z-0 h-full w-full">
+                <div className="bg-background absolute top-0 right-0 h-full w-full opacity-45" />
 
-                    <Logo className='z-30 md:w-72 lg:w-80 absolute right-1/4 top-1/2 -translate-y-1/2' />
+                <Logo className="absolute top-1/2 right-1/4 z-30 -translate-y-1/2 md:w-72 lg:w-80" />
               </div>
-
             </div>
           </div>
         </div>
       </>
+
+      <Toaster richColors />
 
       <TanStackRouterDevtools />
     </div>

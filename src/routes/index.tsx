@@ -2,6 +2,7 @@ import { useForm, useStore } from '@tanstack/react-form';
 import {
   createFileRoute,
   ErrorComponent,
+  Link,
   useNavigate,
 } from '@tanstack/react-router';
 import { useState } from 'react';
@@ -74,13 +75,13 @@ function SignInPage() {
     },
   });
 
-  const state = useStore(form.store, state => state)
+  const state = useStore(form.store, (state) => state);
   const percentageFilled = getFilledFormPercentage(state.values);
 
   return (
-    <section className="h-full py-8 flex justify-center">
-      <div className='w-full max-w-96'>
-        <AuthHeader title='Sign in' percentageFilled={percentageFilled} />
+    <section className="flex h-full justify-center py-8">
+      <div className="w-full max-w-96">
+        <AuthHeader title="Sign in" percentageFilled={percentageFilled} />
 
         <div className="flex flex-col gap-4 py-3">
           <form.Field name="email">
@@ -133,6 +134,14 @@ function SignInPage() {
           {error && (
             <p className="rounded-md bg-red-500 p-2 text-white">{error}</p>
           )}
+
+          {/* Forgot password */}
+          <Link
+            to="/auth/forgot-password"
+            className="text-xs uppercase underline hover:no-underline"
+          >
+            Forgot Password?
+          </Link>
 
           <div className="flex flex-col gap-2 py-3">
             <form.Subscribe selector={(state) => state.isSubmitting}>
