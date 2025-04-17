@@ -11,13 +11,12 @@ import { AuthHeader } from 'src/components/auth/Header.tsx';
 import { CountriesCombobox } from 'src/components/CountriesCombobox';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
-import { z } from 'zod';
 import { submitRegister } from 'src/lib/api/methods/register';
-import { Email, Password } from 'src/lib/schemas/user';
 import {
   interpolateCallbackUrl,
   isValidCallbackUrl,
 } from 'src/lib/callback-url';
+import { signupFormSchema } from '@/lib/schemas/signupForm.schema.ts';
 
 export const Route = createFileRoute('/register')({
   validateSearch: (search: Record<string, unknown>) => {
@@ -37,21 +36,6 @@ export const Route = createFileRoute('/register')({
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
 });
 
-const registrationSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: Email,
-  username: z
-    .string()
-    .min(1, 'Username is required')
-    .regex(
-      /^[a-zA-Z0-9_-]+$/,
-      'Must only contain letters, numbers, underscores, or hyphens'
-    ),
-  password: Password,
-  country: z.string().min(1, 'Country is required'),
-});
-
 function RegisterPage() {
   const navigate = useNavigate();
   const searchParams = Route.useSearch();
@@ -66,9 +50,11 @@ function RegisterPage() {
       username: '',
       password: '',
       country: '',
+      isAdult: false,
+      allowMarketingNotifications: false,
     },
     validators: {
-      onChange: registrationSchema,
+      onChange: signupFormSchema,
     },
     onSubmit: async (props) => {
       try {
@@ -89,16 +75,14 @@ function RegisterPage() {
       }
     },
   });
-  console.log("=>(register.tsx:91) form", form.state);
 
-
-  const state = useStore(form.store, state => state)
+  const state = useStore(form.store, (state) => state);
   const percentageFilled = getFilledFormPercentage(state.values);
 
   return (
-    <section className="h-full py-8 flex justify-center">
-      <div className='w-full max-w-96'>
-        <AuthHeader title='Register' percentageFilled={percentageFilled} />
+    <section className="flex h-full justify-center py-8">
+      <div className="w-full max-w-96">
+        <AuthHeader title="Register" percentageFilled={percentageFilled} />
 
         <div className="flex flex-col gap-4 py-3">
           <form.Field name="firstName">
@@ -244,6 +228,56 @@ function RegisterPage() {
         {error && (
           <p className="rounded-md bg-red-500 p-2 text-white">{error}</p>
         )}
+
+        <div className="mt-4 grid gap-2">
+          <h2 className="w-full text-2xl font-bold uppercase">Preferences</h2>
+
+          <form.Field name="isAdult">
+            {(field) => (
+              <div className="flex items-center">
+                <div className="flex-1">
+                  <Input
+                    type="checkbox"
+                    className="w-5"
+                    checked={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.checked)}
+                    aria-invalid={
+                      field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                    }
+                  />
+                </div>
+                <span className="ml-2 text-sm">
+                  I confirm that I am over 21 and agree to the Game Rules.
+                </span>
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="allowMarketingNotifications">
+            {(field) => (
+              <div className="flex items-center">
+                <div className="flex-1">
+                  <Input
+                    type="checkbox"
+                    className="w-5"
+                    checked={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.checked)}
+                    aria-invalid={
+                      field.state.meta.isTouched &&
+                      field.state.meta.errors.length > 0
+                    }
+                  />
+                </div>
+                <span className="ml-2 text-sm">
+                  Send me exclusive Gameweek previews and the latest news
+                </span>
+              </div>
+            )}
+          </form.Field>
+        </div>
 
         <div className="flex flex-col gap-2 py-3">
           <form.Subscribe selector={(state) => state.isSubmitting}>

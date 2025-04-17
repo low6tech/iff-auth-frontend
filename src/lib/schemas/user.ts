@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
-export const Email = z.string().email().nonempty('Email is required');
+export const Email = z
+  .string()
+  .min(1, { message: 'Email is required' })
+  .email({ message: 'Invalid email' });
 
 export const Password = z
   .string()
