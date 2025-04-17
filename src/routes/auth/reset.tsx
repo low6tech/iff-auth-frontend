@@ -50,18 +50,27 @@ function RouteComponent() {
 
       setIsLoading(true);
       try {
+        console.log('=>(reset.tsx:67) props', props);
         // Make a request
         await submitRenewPassword({ newPassword: password, token });
+
+        toast.success('Password changed', {
+          description: 'You will be redirected to the login page in 5 seconds',
+        });
+
+        const timeout = setTimeout(() => {
+          // TODO add search params if needed
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          navigate({ to: '/' }); // Navigate to the login page
+        }, 5000);
+
+        return () => clearTimeout(timeout);
       } catch (e) {
         console.error('Error:', e);
       } finally {
         setIsLoading(false);
       }
-
-      // TODO add search params if needed
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      navigate({ to: '/' }); // Navigate to the login page
     },
   });
 
@@ -69,7 +78,7 @@ function RouteComponent() {
     <section className="py-4">
       <AuthHeader title="Reset Password" backLink="/auth/forgot-password" />
 
-      <form className="grid gap-4">
+      <div className="grid gap-4">
         <p>
           Enter your email address and we will send you a link to reset your
           password.
@@ -122,11 +131,17 @@ function RouteComponent() {
           )}
         </form.Field>
 
-        <Button disabled={isLoading} variant="primary" size="lg">
+        <Button
+          disabled={isLoading}
+          variant="primary"
+          size="lg"
+          type="submit"
+          onClick={form.handleSubmit}
+        >
           <span>Reset password</span>
           {isLoading && <Loader className="ml-2 h-4 w-4" />}
         </Button>
-      </form>
+      </div>
     </section>
   );
 }

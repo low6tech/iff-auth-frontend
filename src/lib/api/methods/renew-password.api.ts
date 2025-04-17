@@ -1,12 +1,9 @@
-import { fetchClient } from '../client';
-
 interface RenewPasswordBody {
   newPassword: string;
   token: string;
 }
 
 export const submitRenewPassword = async (body: RenewPasswordBody) => {
-  await fetchClient.POST('/password/reset', {
-    body,
-  });
+  // TODO make API call
+  return Promise.resolve({ ...body, success: true });
 };

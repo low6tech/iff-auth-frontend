@@ -47,7 +47,7 @@ function ForgotPassword() {
     <section className="py-4">
       <AuthHeader title="Forgot Password" backLink="/" />
 
-      <form className="grid gap-4">
+      <div className="grid gap-4">
         <p>
           Enter your email address and we will send you a link to reset your
           password.
@@ -85,7 +85,7 @@ function ForgotPassword() {
           <span>Reset password</span>
           {isLoading && <Loader className="ml-2 h-4 w-4" />}
         </Button>
-      </form>
+      </div>
     </section>
   );
 }
