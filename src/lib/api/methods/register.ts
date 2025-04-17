@@ -12,6 +12,7 @@ export const submitRegister = async ({
     country: string;
     firstName: string;
     lastName: string;
+    allowMarketingNotifications: boolean;
   };
   meta: {
     getCallbackUrl: (token: string) => string;
@@ -27,6 +28,7 @@ export const submitRegister = async ({
       country: value.country,
       firstName: value.firstName,
       lastName: value.lastName,
+      allowMarketingNotifications: value.allowMarketingNotifications,
     },
   });
 
