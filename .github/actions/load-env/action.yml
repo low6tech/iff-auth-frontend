@@ -20,8 +20,11 @@ runs:
         SECRETS_JSON: ${{ inputs.secrets }}
         VARS_JSON: ${{ inputs.vars }}
       run: |
-        # Process secrets
-        echo "$SECRETS_JSON" | jq -r 'to_entries | .[] | "echo \"\(.key)=\(.value)\" >> $GITHUB_ENV"' | sh
-        
-        # Process envs
-        echo "$VARS_JSON" | jq -r 'to_entries | .[] | "echo \"\(.key)=\(.value)\" >> $GITHUB_ENV"' | sh
+        # Process secrets using EOF delimiter to avoid masking issues
+        echo "Processing secrets..."
+        echo "$SECRETS_JSON" | jq -r 'to_entries[] | select(.value != null) | "\(.key)<<EOF\n\(.value)\nEOF"' >> $GITHUB_ENV
+
+        # Process vars
+        echo "Processing vars..."
+        echo "$VARS_JSON" | jq -r 'to_entries[] | select(.value != null) | "\(.key)<<EOF\n\(.value)\nEOF"' >> $GITHUB_ENV
+      
